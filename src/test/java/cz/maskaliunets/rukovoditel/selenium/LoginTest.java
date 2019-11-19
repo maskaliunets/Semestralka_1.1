@@ -1,4 +1,4 @@
-package cz.maskaliunets.selenium;
+package cz.maskaliunets.rukovoditel.selenium;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -21,7 +21,7 @@ import java.util.UUID;
 /**
  * Unit test for simple App.
  */
-public class AppTest {
+public class LoginTest {
     private ChromeDriver driver;
 
     @Before
