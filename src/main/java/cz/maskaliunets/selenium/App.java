@@ -1,7 +1,7 @@
-package cz.vse.selenium;
+package cz.maskaliunets.selenium;
 
 /**
- * Hello world!
+ * Ahoj world!
  */
 public class App {
     public static void main(String[] args) {
