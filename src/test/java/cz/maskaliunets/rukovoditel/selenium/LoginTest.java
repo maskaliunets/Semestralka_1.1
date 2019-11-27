@@ -1,5 +1,4 @@
 package cz.maskaliunets.rukovoditel.selenium;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -31,7 +30,7 @@ public class LoginTest {
 //        v .travis.yml je naskriptovano, aby se downloadoval driver pro linux
 //        (akorat pri teto uprave vam to nepujde spustit lokalne, muselo by se to ošéfovat ....rozlišit prostředí např. "lokál" a "travis" s jinou konfigurací)
 //        System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/chromedriver.exe");
-//        ChromeDriverService service = new ChromeDriverService();
+//        ChromeDriver service = new ChromeDriver();
         ChromeOptions cho = new ChromeOptions();
         cho.addArguments("headless");
         driver = new ChromeDriver(cho);
@@ -40,7 +39,7 @@ public class LoginTest {
 
     @After
     public void tearDown() {
-//        driver.close();
+//       driver.close();
     }
 
     @Test
