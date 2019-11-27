@@ -13,7 +13,6 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -25,10 +24,10 @@ public class LoginTest {
 
     @Before
     public void init() {
-//        zakomentujte radek // System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/chromedriver.exe");
-//        aby se Selenium nesnazilo pouzit .exe driver, který na linuxu nemuze spustit,
-//        v .travis.yml je naskriptovano, aby se downloadoval driver pro linux
-//        (akorat pri teto uprave vam to nepujde spustit lokalne, muselo by se to ošéfovat ....rozlišit prostředí např. "lokál" a "travis" s jinou konfigurací)
+/**    zakomentujte radek // System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/chromedriver.exe");
+       aby se Selenium nesnazilo pouzit .exe driver, který na linuxu nemuze spustit,
+       v .travis.yml je naskriptovano, aby se downloadoval driver pro linux
+       (akorat pri teto uprave vam to nepujde spustit lokalne, muselo by se to ošéfovat ....rozlišit prostředí např. "lokál" a "travis" s jinou konfigurací)*/
 //        System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/chromedriver.exe");
 //        ChromeDriver service = new ChromeDriver();
         ChromeOptions cho = new ChromeOptions();
@@ -55,7 +54,7 @@ public class LoginTest {
     @Test
     public void google2_should_fail() {
         driver.get("https://www.google.com/");
-       // WebElement searchInputNotExisting = driver.findElement(By.name("kdsfkladsjfas"));
+        // WebElement searchInputNotExisting = driver.findElement(By.name("kdsfkladsjfas"));
         driver.quit();
     }
 
@@ -67,10 +66,10 @@ public class LoginTest {
     }
 
     public void shouldNotLoginUsingInvalidPassword() {
-        // given
+        /**given*/
         driver.get("https://opensource-demo.orangehrmlive.com/");
 
-        // when
+        /**when*/
         WebElement usernameInput = driver.findElement(By.id("txtUsername"));
         usernameInput.sendKeys("admin");
         WebElement passwordInput = driver.findElement(By.id("txtPassword"));
@@ -78,19 +77,18 @@ public class LoginTest {
         WebElement loginButton = driver.findElement(By.id("btnLogin"));
         loginButton.click();
 
-        // then
+        /** then*/
         WebElement errorMessageSpan = driver.findElement(By.id("spanMessage"));
         Assert.assertEquals("Invalid credentials", errorMessageSpan.getText());
 
-        // validation error exists
-        // url changed to https://opensource-demo.orangehrmlive.com/index.php/auth/validateCredentials
-        // there is no menu
+        /** validation error exists
+        url changed to https://opensource-demo.orangehrmlive.com/index.php/auth/validateCredentials
+        there is no menu*/
     }
-
 
     @Test
     public void shouldLoginUsingValidCredentials() {
-        // given
+        /** given*/
         //driver.get("http://demo.churchcrm.io/master/");
         driver.get("http://digitalnizena.cz/church/");
 
@@ -104,10 +102,10 @@ public class LoginTest {
     }
 
     public void shouldCreateNewUser() throws InterruptedException {
-        // Given
+        /** Given*/
         shouldLoginUsingValidCredentials();
 
-        // When
+        /** When*/
         driver.get("http://digitalnizena.cz/church/PersonEditor.php");
 
         WebElement genderSelectElement = driver.findElement(By.name("Gender"));
@@ -129,29 +127,27 @@ public class LoginTest {
         WebElement personSaveButton = driver.findElement(By.id("PersonSaveButton"));
         personSaveButton.click();
 
-        // Then
+        /** Then*/
         driver.get("http://digitalnizena.cz/church/v2/people");
 
         WebElement searchInput = driver.findElement(By.cssSelector("#members_filter input"));
         searchInput.sendKeys(uuid);
         Thread.sleep(500);
 
-        // to verify if record is shown in table grid, we first filter the whole table to get exactly one data row
-        // that row should contain previously generated UUID value (in last name
-        // UKOL...opravit, doplnit tak, aby se provedla verifikace ze kontakt, ktery jsme vytvorili opravdu existuje
-        //    (jde vyhledat a zobrazi se v tabulce)
-        //    doporucuji radek tabulky s danou osobou projit (traverzovat), nebo jinym zpusobem v nem najit retezec UUID, ktery jednoznacne identifikuje pridanou osobu
+        /** to verify if record is shown in table grid, we first filter the whole table to get exactly one data row
+        that row should contain previously generated UUID value (in last name
+        UKOL...opravit, doplnit tak, aby se provedla verifikace ze kontakt, ktery jsme vytvorili opravdu existuje
+        (jde vyhledat a zobrazi se v tabulce)
+        doporucuji radek tabulky s danou osobou projit (traverzovat), nebo jinym zpusobem v nem najit retezec UUID, ktery jednoznacne identifikuje pridanou osobu*/
         List<WebElement> elements = driver.findElements(By.cssSelector("table#members tr"));
         Assert.assertEquals(2, elements.size());
 
-        // data row is at index 0, header row is at index 1  (because in ChurchCRM html code there is tbody before thead)
+        /** data row is at index 0, header row is at index 1  (because in ChurchCRM html code there is tbody before thead)*/
         WebElement personTableRow = elements.get(0);
 
-
-        // option1
+        /**option1*/
         Assert.assertTrue(personTableRow.getText().contains(uuid));
-
-        // option2 - traverse all cells in table grid
+        /** option2 - traverse all cells in table grid*/
         List<WebElement> cells = personTableRow.findElements(By.tagName("td"));
         final int EXPECTED_COLUMNS = 9;
         Assert.assertEquals(EXPECTED_COLUMNS, cells.size());
@@ -160,20 +156,16 @@ public class LoginTest {
             if (cell.getText().contains(uuid)) {
                 //
             }
-
             System.out.println(cells.get(i).getText());
         }
     }
 
-
     @Test
     public void given_userIsLoggedIn_when_userAddsNewDeposit_then_depositRecordIsShownInDepositTableGrid() throws InterruptedException {
-        // GIVEN user is logged in
-
+        /** GIVEN user is logged in*/
         shouldLoginUsingValidCredentials();
 
-        // WHEN user adds deposit comment
-
+        /** WHEN user adds deposit comment*/
         driver.get("http://digitalnizena.cz/church/FindDepositSlip.php");
 
         WebElement depositCommentInput = driver.findElement(By.cssSelector("#depositComment"));
@@ -189,22 +181,18 @@ public class LoginTest {
         WebElement addDepositButton = driver.findElement(By.cssSelector("#addNewDeposit"));
         addDepositButton.click();
 
-        // THEN newly added deposit should be shown in deposits table grid
-
-        // option1 - wait exactly 2 seconds, blocks the thread ....not recommended
-        // Thread.sleep(2000);
-
-        // option2 - use custom "expected condition" of WebDriver framework
+        /** THEN newly added deposit should be shown in deposits table grid
+        option1 - wait exactly 2 seconds, blocks the thread ....not recommended
+        Thread.sleep(2000);
+        option2 - use custom "expected condition" of WebDriver framework*/
         WebDriverWait wait = new WebDriverWait(driver, 2);     // timeout after 2 seconds
         wait.until(new ExpectedCondition<Boolean>() {
             @Override
             public Boolean apply(WebDriver webDriver) {
-                // each time, we try to get the very first row from table grid and check, if contains the last record
-
+                /** each time, we try to get the very first row from table grid and check, if contains the last record*/
                 List<WebElement> depositRows = driver.findElements(By.cssSelector("#depositsTable_wrapper #depositsTable tbody tr"));
                 WebElement firstRow = depositRows.get(0);
                 String innerHTML = firstRow.getAttribute("innerHTML");
-
                 if (innerHTML.contains(uuid)) {
                     Assert.assertTrue(innerHTML.contains("10-30-18"));    // beware, different date format in table grid vs. input field
                     Assert.assertTrue(innerHTML.contains(depositComment));
@@ -218,40 +206,30 @@ public class LoginTest {
 
     public void deleteDeposits() throws InterruptedException {
         shouldLoginUsingValidCredentials();
-
         driver.get("http://digitalnizena.cz/church/FindDepositSlip.php");
-
         Thread.sleep(1000);
-
         List<WebElement> depositRows = driver.findElements(By.cssSelector("#depositsTable tbody tr"));
-
         for (WebElement row : depositRows) {
             row.click();
         }
-
-//
         WebElement deleteButton = driver.findElement(By.cssSelector("#deleteSelectedRows"));
         deleteButton.click();
-//
-//        //TODO compare this WebElement confirmDeleteButton = driver.findElement(By.cssSelector(".modal-dialog .btn-primary"));
+
+        //TODO compare this WebElement confirmDeleteButton = driver.findElement(By.cssSelector(".modal-dialog .btn-primary"));
         WebElement confirmDeleteButton = driver.findElement(By.cssSelector(".modal-content > .modal-footer .btn-primary"));
         WebDriverWait wait = new WebDriverWait(driver, 1);
         wait.until(ExpectedConditions.visibilityOf(confirmDeleteButton));
         confirmDeleteButton.click();
-
-//        // actually the application behaves incorrect => when delete all rows, Delete button should be disabled
-//        // we have our test correct, so it good that test fails!
+/**     actually the application behaves incorrect => when delete all rows, Delete button should be disabled
+        we have our test correct, so it good that test fails!*/
         Assert.assertFalse(deleteButton.isEnabled());
     }
 
     public void loadingExample() {
         driver.get("http://digitalnizena.cz/priklad/loading1.html");
-
         WebElement button = driver.findElement(By.cssSelector("#my-button"));
-
         WebDriverWait wait = new WebDriverWait(driver, 12);
         wait.until(ExpectedConditions.visibilityOf(button));
-
-        // here in code, we are 100% sure, that button is visible
+        /**here in code, we are 100% sure, that button is visible*/
     }
 }
