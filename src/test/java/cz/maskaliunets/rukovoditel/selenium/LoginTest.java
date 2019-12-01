@@ -215,7 +215,7 @@ public class LoginTest {
         WebElement deleteButton = driver.findElement(By.cssSelector("#deleteSelectedRows"));
         deleteButton.click();
 
-        //TODO compare this WebElement confirmDeleteButton = driver.findElement(By.cssSelector(".modal-dialog .btn-primary"));
+        //TODOmaybe compare this WebElement confirmDeleteButton = driver.findElement(By.cssSelector(".modal-dialog .btn-primary"));
         WebElement confirmDeleteButton = driver.findElement(By.cssSelector(".modal-content > .modal-footer .btn-primary"));
         WebDriverWait wait = new WebDriverWait(driver, 1);
         wait.until(ExpectedConditions.visibilityOf(confirmDeleteButton));
