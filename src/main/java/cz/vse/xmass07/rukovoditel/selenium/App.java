@@ -1,4 +1,4 @@
-package cz.maskaliunets.rukovoditel.selenium;
+package cz.vse.xmass07.rukovoditel.selenium;
 
 /**
  * Ahoj world!
