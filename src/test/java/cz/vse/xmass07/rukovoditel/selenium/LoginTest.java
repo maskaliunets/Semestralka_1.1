@@ -1,4 +1,4 @@
-﻿package cz.vse.xmass07.rukovoditel.selenium;
+package cz.maskaliunets.rukovoditel.selenium;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -160,5 +160,76 @@ public class LoginTest {
         }
     }
 
+    @Test
+    public void given_userIsLoggedIn_when_userAddsNewDeposit_then_depositRecordIsShownInDepositTableGrid() throws InterruptedException {
+        /** GIVEN user is logged in*/
+        shouldLoginUsingValidCredentials();
 
+        /** WHEN user adds deposit comment*/
+        driver.get("http://digitalnizena.cz/church/FindDepositSlip.php");
+
+        WebElement depositCommentInput = driver.findElement(By.cssSelector("#depositComment"));
+        String uuid = UUID.randomUUID().toString();
+        String depositComment = "deposit-PavelG-" + uuid;
+        depositCommentInput.sendKeys(depositComment);
+
+        WebElement depositDateInput = driver.findElement(By.cssSelector("#depositDate"));
+        depositDateInput.click();
+        depositDateInput.clear();
+        depositDateInput.sendKeys("2018-10-30");
+
+        WebElement addDepositButton = driver.findElement(By.cssSelector("#addNewDeposit"));
+        addDepositButton.click();
+
+        /** THEN newly added deposit should be shown in deposits table grid
+        option1 - wait exactly 2 seconds, blocks the thread ....not recommended
+        Thread.sleep(2000);
+        option2 - use custom "expected condition" of WebDriver framework*/
+        WebDriverWait wait = new WebDriverWait(driver, 2);     // timeout after 2 seconds
+        wait.until(new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+                /** each time, we try to get the very first row from table grid and check, if contains the last record*/
+                List<WebElement> depositRows = driver.findElements(By.cssSelector("#depositsTable_wrapper #depositsTable tbody tr"));
+                WebElement firstRow = depositRows.get(0);
+                String innerHTML = firstRow.getAttribute("innerHTML");
+                if (innerHTML.contains(uuid)) {
+                    Assert.assertTrue(innerHTML.contains("10-30-18"));    // beware, different date format in table grid vs. input field
+                    Assert.assertTrue(innerHTML.contains(depositComment));
+                    return true;     // expected condition is met
+                } else {
+                    return false;    // selenium webdriver will continue polling the DOM each 500ms and check the expected condition by calling method apply(webDriver) again
+                }
+            }
+        });
+    }
+
+    public void deleteDeposits() throws InterruptedException {
+        shouldLoginUsingValidCredentials();
+        driver.get("http://digitalnizena.cz/church/FindDepositSlip.php");
+        Thread.sleep(1000);
+        List<WebElement> depositRows = driver.findElements(By.cssSelector("#depositsTable tbody tr"));
+        for (WebElement row : depositRows) {
+            row.click();
+        }
+        WebElement deleteButton = driver.findElement(By.cssSelector("#deleteSelectedRows"));
+        deleteButton.click();
+
+        //TODOmaybe compare this WebElement confirmDeleteButton = driver.findElement(By.cssSelector(".modal-dialog .btn-primary"));
+        WebElement confirmDeleteButton = driver.findElement(By.cssSelector(".modal-content > .modal-footer .btn-primary"));
+        WebDriverWait wait = new WebDriverWait(driver, 1);
+        wait.until(ExpectedConditions.visibilityOf(confirmDeleteButton));
+        confirmDeleteButton.click();
+/**     actually the application behaves incorrect => when delete all rows, Delete button should be disabled
+        we have our test correct, so it good that test fails!*/
+        Assert.assertFalse(deleteButton.isEnabled());
+    }
+
+    public void loadingExample() {
+        driver.get("http://digitalnizena.cz/priklad/loading1.html");
+        WebElement button = driver.findElement(By.cssSelector("#my-button"));
+        WebDriverWait wait = new WebDriverWait(driver, 12);
+        wait.until(ExpectedConditions.visibilityOf(button));
+        /**here in code, we are 100% sure, that button is visible*/
+    }
 }
