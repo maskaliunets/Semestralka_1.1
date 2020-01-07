@@ -1,4 +1,4 @@
-package cz.maskaliunets.rukovoditel.selenium;
+﻿package cz.vse.xmass07.rukovoditel.selenium;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
