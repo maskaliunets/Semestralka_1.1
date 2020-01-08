@@ -24,18 +24,20 @@ public class LoginTest {
 
     @Before
     public void init() {
-        /**    zakomentujte radek // System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/chromedriver.exe");
-         aby se Selenium nesnazilo pouzit .exe driver, který na linuxu nemuze spustit,
-         v .travis.yml je naskriptovano, aby se downloadoval driver pro linux
-         (akorat pri teto uprave vam to nepujde spustit lokalne, muselo by se to ošéfovat ....rozlišit prostředí např. "lokál" a "travis" s jinou konfigurací)*/
+/**    zakomentujte radek // System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/chromedriver.exe");
+       aby se Selenium nesnazilo pouzit .exe driver, který na linuxu nemuze spustit,
+       v .travis.yml je naskriptovano, aby se downloadoval driver pro linux
+       (akorat pri teto uprave vam to nepujde spustit lokalne, muselo by se to ošéfovat ....rozlišit prostředí např. "lokál" a "travis" s jinou konfigurací)*/
 //        System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/chromedriver.exe");
 //        ChromeDriver service = new ChromeDriver();
 //        ChromeOptions cho = new ChromeOptions();
 //        cho.addArguments("headless");
-//        webDriver = new ChromeDriver(cho);
-//        webDriver.manage().window().maximize();
+//        driver = new ChromeDriver(cho);
+//        driver.manage().window().maximize();
+        //Send form
         webDriver = UtilTest.init();
     }
+
 
     @After
     public void tearDown() {
