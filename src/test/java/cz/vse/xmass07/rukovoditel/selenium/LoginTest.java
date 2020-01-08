@@ -30,10 +30,10 @@ public class LoginTest {
          (akorat pri teto uprave vam to nepujde spustit lokalne, muselo by se to ošéfovat ....rozlišit prostředí např. "lokál" a "travis" s jinou konfigurací)*/
 //        System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/chromedriver.exe");
 //        ChromeDriver service = new ChromeDriver();
-        ChromeOptions cho = new ChromeOptions();
-        cho.addArguments("headless");
-        webDriver = new ChromeDriver(cho);
-        webDriver.manage().window().maximize();
+//        ChromeOptions cho = new ChromeOptions();
+//        cho.addArguments("headless");
+//        webDriver = new ChromeDriver(cho);
+//        webDriver.manage().window().maximize();
         webDriver = UtilTest.init();
     }
 
