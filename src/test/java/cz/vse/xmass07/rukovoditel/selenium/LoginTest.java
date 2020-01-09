@@ -85,18 +85,6 @@ public class LoginTest {
         Assert.assertTrue(UtilTest.checkDashboard(driver));
     }
 
-    //bonus3
-    @Test
-    public void logInNedative4() {
-        //empty password
-        // Given & When
-        UtilTest.login(driver, "dasasd", "saddsaasd");
-        //Then
-        WebElement label = driver.findElement(By.cssSelector("#alert-danger"));
-        Assert.assertEquals(label.getText(), "No match for Username and/or Password.");
-        Assert.assertTrue(UtilTest.checkDashboard(driver));
-    }
-
     @Test
     public void  loggedUserLoggsOff() {
         //Given
