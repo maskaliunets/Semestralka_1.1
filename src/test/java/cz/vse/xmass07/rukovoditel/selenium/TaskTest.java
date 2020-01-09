@@ -1,6 +1,4 @@
 package cz.vse.xmass07.rukovoditel.selenium;
-
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -17,6 +15,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+/*class was hidden due to not compatibility with Travis CI
+works on local*/
 public class TaskTest {/*
 
     private ChromeDriver driver;
