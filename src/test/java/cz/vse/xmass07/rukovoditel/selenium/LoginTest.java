@@ -44,8 +44,8 @@ public class LoginTest {
     }
 
     @Test
-    public void given_loginPage_when_userLogsIn_then_userGetWelcomePage() {
-        //Given + When
+    public void logInPositive() {
+        //Given & When
         UtilTest.login(driver, "rukovoditel", "vse456ru");
         //Then
         Assert.assertTrue(driver.getTitle().startsWith("Rukovoditel | Dashboard"));
@@ -53,27 +53,40 @@ public class LoginTest {
     }
 
     @Test
-    public void given_loginPage_when_userUsesEmptyPassword_then_errorMessageShouldDisplayed() {
-        //Given + When
+    public void logInNedative() {
+        //User cannot log into system using valid username and invalid password.
+        // Given & When
+        UtilTest.login(driver, "rukovoditel", "adsasd");
+        //Then
+        WebElement label = driver.findElement(By.cssSelector(".alert.alert-danger"));
+        Assert.assertTrue(label.getText().contains("No match for Username and/or Password."));
+        Assert.assertTrue(UtilTest.checkDashboard(driver));
+    }
+    //bonus
+    @Test
+    public void logInNedative2() {
+        //empty password
+        // Given & When
         UtilTest.login(driver, "rukovoditel", "");
         //Then
         WebElement label = driver.findElement(By.cssSelector("#password-error"));
         Assert.assertEquals(label.getText(), "This field is required!");
         Assert.assertTrue(UtilTest.checkDashboard(driver));
     }
-
+    //bonus2
     @Test
-    public void given_loginPage_when_userUsesInvalidPassword_then_alertMessageShouldDisplayed() {
-        //Given + When
-        UtilTest.login(driver, "rukovoditel", "password");
+    public void logInNedative3() {
+        //empty password
+        // Given & When
+        UtilTest.login(driver, "", "vse456ru");
         //Then
-        WebElement label = driver.findElement(By.cssSelector(".alert.alert-danger"));
-        Assert.assertTrue(label.getText().contains("No match for Username and/or Password."));
+        WebElement label = driver.findElement(By.cssSelector("#username-error"));
+        Assert.assertEquals(label.getText(), "This field is required!");
         Assert.assertTrue(UtilTest.checkDashboard(driver));
     }
 
     @Test
-    public void given_userIsLoggedIn_when_userLogsOut_then_userCannotRedirectToDashboard() {
+    public void  loggedUserLoggsOff() {
         //Given
         UtilTest.login(driver, "rukovoditel", "vse456ru");
         Assert.assertTrue(driver.getTitle().startsWith("Rukovoditel | Dashboard"));
