@@ -92,7 +92,7 @@ public class LoginTest {
         // Given & When
         UtilTest.login(driver, "dasasd", "saddsaasd");
         //Then
-        WebElement label = driver.findElement(By.cssSelector("#alert alert-danger"));
+        WebElement label = driver.findElement(By.cssSelector("#alert-danger"));
         Assert.assertEquals(label.getText(), "No match for Username and/or Password.");
         Assert.assertTrue(UtilTest.checkDashboard(driver));
     }
