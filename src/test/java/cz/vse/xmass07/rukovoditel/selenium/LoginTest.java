@@ -20,10 +20,10 @@ import java.util.UUID;
  * Unit test for simple App.
  */
 public class LoginTest {
-    private ChromeDriver webDriver;
+    private ChromeDriver driver;
 
     @Before
-    public void init() {
+    public void initChrome() {
 /**    zakomentujte radek // System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/chromedriver.exe");
        aby se Selenium nesnazilo pouzit .exe driver, který na linuxu nemuze spustit,
        v .travis.yml je naskriptovano, aby se downloadoval driver pro linux
@@ -35,58 +35,54 @@ public class LoginTest {
 //        driver = new ChromeDriver(cho);
 //        driver.manage().window().maximize();
         //Send form
-        webDriver = UtilTest.init();
+        driver = UtilTest.initChrome();
     }
-
 
     @After
     public void tearDown() {
-        webDriver.close();
+        driver.close();
     }
 
     @Test
     public void given_loginPage_when_userLogsIn_then_userGetWelcomePage() {
         //Given + When
-        UtilTest.login(webDriver, "rukovoditel", "vse456ru");
+        UtilTest.login(driver, "rukovoditel", "vse456ru");
         //Then
-        Assert.assertTrue(webDriver.getTitle().startsWith("Rukovoditel | Dashboard"));
-        Assert.assertFalse(UtilTest.checkInaccessiblePage(webDriver));
+        Assert.assertTrue(driver.getTitle().startsWith("Rukovoditel | Dashboard"));
+        Assert.assertFalse(UtilTest.checkDashboard(driver));
     }
 
     @Test
     public void given_loginPage_when_userUsesEmptyPassword_then_errorMessageShouldDisplayed() {
         //Given + When
-        UtilTest.login(webDriver, "rukovoditel", "");
+        UtilTest.login(driver, "rukovoditel", "");
         //Then
-        WebElement label = webDriver.findElement(By.cssSelector("#password-error"));
+        WebElement label = driver.findElement(By.cssSelector("#password-error"));
         Assert.assertEquals(label.getText(), "This field is required!");
-        Assert.assertTrue(UtilTest.checkInaccessiblePage(webDriver));
+        Assert.assertTrue(UtilTest.checkDashboard(driver));
     }
 
     @Test
     public void given_loginPage_when_userUsesInvalidPassword_then_alertMessageShouldDisplayed() {
         //Given + When
-        UtilTest.login(webDriver, "rukovoditel", "password");
+        UtilTest.login(driver, "rukovoditel", "password");
         //Then
-        WebElement label = webDriver.findElement(By.cssSelector(".alert.alert-danger"));
+        WebElement label = driver.findElement(By.cssSelector(".alert.alert-danger"));
         Assert.assertTrue(label.getText().contains("No match for Username and/or Password."));
-        Assert.assertTrue(UtilTest.checkInaccessiblePage(webDriver));
+        Assert.assertTrue(UtilTest.checkDashboard(driver));
     }
 
     @Test
     public void given_userIsLoggedIn_when_userLogsOut_then_userCannotRedirectToDashboard() {
         //Given
-        UtilTest.login(webDriver, "rukovoditel", "vse456ru");
-        Assert.assertTrue(webDriver.getTitle().startsWith("Rukovoditel | Dashboard"));
-
+        UtilTest.login(driver, "rukovoditel", "vse456ru");
+        Assert.assertTrue(driver.getTitle().startsWith("Rukovoditel | Dashboard"));
         //When
-        webDriver.findElement(By.cssSelector(".username")).click();
-        webDriver.findElement(By.cssSelector(".dropdown.user .fa.fa-sign-out")).click();
-
-        WebDriverWait wait = new WebDriverWait(webDriver, 3);
+        driver.findElement(By.cssSelector(".username")).click();
+        driver.findElement(By.cssSelector(".dropdown.user .fa.fa-sign-out")).click();
+        WebDriverWait wait = new WebDriverWait(driver, 3);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("form#login_form")));
-
         //Then
-        Assert.assertTrue(UtilTest.checkInaccessiblePage(webDriver));
+        Assert.assertTrue(UtilTest.checkDashboard(driver));
     }
 }
